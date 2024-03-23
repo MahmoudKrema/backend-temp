@@ -19,13 +19,28 @@ class UserService {
     }
 
     async updateUser(id, user) {
-        throw new Error('Method not implemented.');
+        const userDb = await UserRepo.updateUser(id, user);
+        return userDb;
     }
 
     async deleteUser(id) {
         const userDb = await UserRepo.deleteUser(id);
         return userDb;
     }
+
+    
+    /**
+     * Check if the given attribute value is unique.
+     *
+     * @param {string} attribute - The attribute to check uniqueness for.
+     * @param {any} value - The value to check uniqueness against.
+     * @return {Promise<boolean>} Whether the attribute value is unique.
+     */
+    async isUniqueAttribute(attribute, value) {
+        const isUnique = await UserRepo.isUniqueAttribute(attribute, value);
+        return isUnique;
+    }
+
 }
 
 export default UserService;

@@ -1,8 +1,13 @@
 import Joi from "joi";
+import UserService from "../../services/user.service.js";
+
+
 
 class UserValidator {
   constructor() {
-    this.createUser = Joi.object({
+
+    this.userService = new UserService();
+    this.createSchema = Joi.object({
       username: Joi.string()
         .empty()
         .min(3)
@@ -27,19 +32,27 @@ class UserValidator {
     });
   
   
-    this.getUser = Joi.object({
+    this.getSchema = Joi.object({
       id: Joi.number().integer().required(),
     });
   
-    this.deleteUser = Joi.object({
+    this.deleteSchema = Joi.object({
       id: Joi.number().integer().required(),
     });
     
   }
 
-  validateCreateUser = (req, res, next) => {
+  validateCreate = async (req, res, next) => {
     const user = req.body;
-    const { error } = this.createUser.validate(user);
+    const { error } = this.createSchema.validate(user);
+
+    if (!await this.userService.isUniqueAttribute("username", user.username)) {
+      return res.status(500).json({ error: 'Username is taken' });
+    }
+
+    if (!await this.userService.isUniqueAttribute("email", user.email)) {
+      return res.status(500).json({ error: 'Email is taken' });
+    }
 
     if (error) {
       return res.status(500).json({ error: error.details });
@@ -48,11 +61,10 @@ class UserValidator {
     next();
   }
 
-  validateGetUser = (req, res, next) => {
+  validateUpdate = (req, res, next) => {
 
-    console.log("this!!!!!!", this);
 
-    const { error, value: { id } } = this.getUser.validate(req.params);
+    const { error, value: { id } } = this.getSchema.validate(req.params);
 
     if (error) {
         return res.status(500).json({ error: error.details });
@@ -62,9 +74,22 @@ class UserValidator {
     next();
   }
 
-  validateDeleteUser = (req, res, next) => {
+  validateGet = (req, res, next) => {
 
-    const { error, value: { id } } = this.deleteUser.validate(req.params);
+
+    const { error, value: { id } } = this.getSchema.validate(req.params);
+
+    if (error) {
+        return res.status(500).json({ error: error.details });
+    }
+    req.params.id = id;
+
+    next();
+  }
+
+  validateDelete = (req, res, next) => {
+
+    const { error, value: { id } } = this.deleteSchema.validate(req.params);
 
     if (error) {
         return res.status(500).json({ error: error.details });

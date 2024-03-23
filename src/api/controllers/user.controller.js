@@ -43,16 +43,20 @@ class UserController {
 
     }
 
-    static updateUser = async (req, res) => {
+    updateUser = async (req, res) => {
         const { id } = req.params;
+        
+        const user = req.body;
+
+        console.log("user", user);
+        console.log("id", id);
+
+
         try {
-            const user = await User.findById(id);
-            if (!user) return res.status(404).json({ message: 'User Not Found' });
-            user.name = req.body.name || user.name;
-            user.email = req.body.email || user.email;
-            const updatedUser = await user.save();
-            res.status(200).json(updatedUser);
-        } catch (error) {
+            const userDb = await this.userService.updateUser(id, user);
+            res.status(200).json({ data: userDb });
+        }
+        catch (error) {
             res.status(500).json({ message: error.message });
         }
     }
