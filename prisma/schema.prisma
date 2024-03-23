@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:root@localhost:3307/store"
+}
+
+// prisma/schema.prisma
+// schema.prisma
+
+// Define your database tables and their relationships
+// User table to store information about users
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  orders    Order[]
+  products  Product[]
+}
+
+// Product table to store information about products
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  stock       Int
+  createdAt   DateTime @default(now())
+  // Define a relation to the User who created this product
+  seller      User     @relation(fields: [sellerId], references: [id])
+  sellerId    Int
+  Order       Order?   @relation(fields: [orderId], references: [id])
+  orderId     Int?
+}
+
+// Order table to store information about orders
+model Order {
+  id          Int       @id @default(autoincrement())
+  totalAmount Float
+  createdAt   DateTime  @default(now())
+  // Define a relation to the User who made this order
+  customer    User      @relation(fields: [customerId], references: [id])
+  customerId  Int
+  // Define a relation to the Products in this order
+  products    Product[]
+}
+
+// Define indexes or constraints if needed
+// Example:
+// @@unique([username, email])
