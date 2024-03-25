@@ -39,7 +39,21 @@ class UserValidator {
     this.deleteSchema = Joi.object({
       id: Joi.number().integer().required(),
     });
-    
+
+    this.updateSchema = Joi.object({
+
+      id: Joi.number().integer().required(),
+
+      username: Joi.string()
+        .empty()
+        .min(3)
+        .max(255),
+      
+      email: Joi.string()
+      .email()
+          
+      
+    })   
   }
 
   validateCreate = async (req, res, next) => {
@@ -61,14 +75,32 @@ class UserValidator {
     next();
   }
 
-  validateUpdate = (req, res, next) => {
+  validateUpdate = async (req, res, next) => {
 
+    // Assuming you have a request object containing both body and path parameters
+    const request = {
+      ...req.body,
+      ...req.params
+    };
 
-    const { error, value: { id } } = this.getSchema.validate(req.params);
+    const { error, value: { id } } = this.updateSchema.validate(request);
 
     if (error) {
-        return res.status(500).json({ error: error.details });
+      return res.status(500).json({ error: error.details });
     }
+    
+    const user = await this.userService.getUserById(id);
+
+    if (!user) {
+      return res.status(500).json({ error: "User not found" });
+    }
+
+    const userWithSameUsername = await this.userService.getUserByAttribute("username", req.body.username);
+
+    if (userWithSameUsername && userWithSameUsername.id !== id) {
+      return res.status(500).json({ error: "Username is taken" });
+    }
+
     req.params.id = id;
 
     next();
@@ -82,18 +114,26 @@ class UserValidator {
     if (error) {
         return res.status(500).json({ error: error.details });
     }
+
     req.params.id = id;
 
     next();
   }
 
-  validateDelete = (req, res, next) => {
+  validateDelete = async (req, res, next) => {
 
     const { error, value: { id } } = this.deleteSchema.validate(req.params);
 
     if (error) {
         return res.status(500).json({ error: error.details });
     }
+
+    const user = await this.userService.getUserById(id);
+
+    if (!user) {
+      return res.status(500).json({ error: "User not found" });
+    }
+
     req.params.id = id;
 
     next();

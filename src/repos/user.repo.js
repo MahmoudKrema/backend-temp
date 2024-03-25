@@ -32,10 +32,10 @@ class UserRepo {
    * @param {string} username - The username of the user to retrieve.
    * @return {Promise<Object>} A Promise that resolves to the user object if found, or null if not found.
    */
-  static async getUserByUsername(username) {
+  static async getUserByAttribute(attribute, value) {
     const user = await prisma.user.findUnique({
       where: {
-        username,
+        [attribute]: value,
       },
     });
     return user;

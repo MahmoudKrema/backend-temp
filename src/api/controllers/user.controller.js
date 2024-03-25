@@ -1,5 +1,4 @@
 import UserService from "../../services/user.service.js";
-import userValidator from "../validators/user.js"
 
 class UserController {
 
@@ -47,10 +46,6 @@ class UserController {
         const { id } = req.params;
         
         const user = req.body;
-
-        console.log("user", user);
-        console.log("id", id);
-
 
         try {
             const userDb = await this.userService.updateUser(id, user);
