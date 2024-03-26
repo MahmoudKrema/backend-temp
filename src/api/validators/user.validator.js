@@ -60,16 +60,17 @@ class UserValidator {
     const user = req.body;
     const { error } = this.createSchema.validate(user);
 
+    if (error) {
+      return res.status(500).json({ error: error.details });
+    }
+
+    // Use model istead of service
     if (!await this.userService.isUniqueAttribute("username", user.username)) {
       return res.status(500).json({ error: 'Username is taken' });
     }
 
     if (!await this.userService.isUniqueAttribute("email", user.email)) {
       return res.status(500).json({ error: 'Email is taken' });
-    }
-
-    if (error) {
-      return res.status(500).json({ error: error.details });
     }
 
     next();

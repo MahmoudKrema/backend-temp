@@ -19,14 +19,10 @@ class UserController {
 
         const id = req.params.id;
 
-        try {
-            const user = await this.userService.getUserById(id);
-            res.status(200).json({ data: user });
-        } catch (error) {
-            console.log(error);
+ 
+        const user = await this.userService.getUserById(id);
+        res.status(200).json({ data: user });
 
-            res.status(500).json({ message: error.message });
-        }
     }
 
     createUser = async (req, res) => {

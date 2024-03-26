@@ -1,4 +1,5 @@
 import UserRepo from "../repos/user.repo.js";
+import { NotFoundError } from "../utils/appError.js";
 
 class UserService {
     async getUsers() {
@@ -8,7 +9,12 @@ class UserService {
 
     async getUserById(id) {
 
+
         const user = await UserRepo.getUserById(id);
+
+        if (!user) {
+            throw new NotFoundError("User not found");
+        }
 
         return user;
     }
