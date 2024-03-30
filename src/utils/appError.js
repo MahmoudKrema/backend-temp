@@ -1,16 +1,4 @@
-const STATUS_CODES = {
-    BAD_REQUEST: 400,
-    NOT_FOUND: 404,
-    FORBIDDEN: 403,
-    INTERNAL_SERVER_ERROR: 500,
-}
-
-const ERROR_TYPES = {
-    BAD_REQUEST: 'BAD_REQUEST_ERROR',
-    NOT_FOUND: 'NOT_FOUND_ERROR',
-    FORBIDDEN: 'FORBIDDEN_ERROR',
-    INTERNAL_SERVER_ERROR: 'INTERNAL_SERVER_ERROR',
-}
+import { STATUS_CODES, ERROR_TYPES } from "./constants.js";
 
 class AppError extends Error {
     /**
