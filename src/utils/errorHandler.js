@@ -12,6 +12,9 @@ export default class ErrorHandler {
      */
     static handle(error, res) {
 
+        // log the error
+        console.error(error);
+
         // TODO: handle uncaught errors and error when no res object and think about the cases with no res object
         if (!res) {
             
