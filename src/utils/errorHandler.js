@@ -12,9 +12,6 @@ export default class ErrorHandler {
      */
     static handle(error, res) {
 
-        // log the error
-        console.error(error);
-
         // TODO: handle uncaught errors and error when no res object and think about the cases with no res object
         if (!res) {
             
@@ -26,6 +23,9 @@ export default class ErrorHandler {
             return new ErrorResponse(error).send(res);
         }
         else {
+
+            // if it's not an AppError, log the error for debugging
+            console.error(error);
 
             // if it's not an AppError, it's an internal server error and we don't want to leak the error details
             const internalServerError = new InternalServerError();
