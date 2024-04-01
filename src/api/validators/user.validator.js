@@ -7,6 +7,7 @@ class UserValidator {
   constructor() {
 
     this.userService = new UserService();
+
     this.createSchema = Joi.object({
       username: Joi.string()
         .empty()
@@ -53,7 +54,17 @@ class UserValidator {
       .email()
           
       
-    })   
+    })
+
+    this.login = Joi.object({
+      username: Joi.string()
+        .empty()
+        .required(),
+  
+        password: Joi.string()
+        .empty()
+        .required()
+    });
   }
 
   validateCreate = async (req, res, next) => {
@@ -71,6 +82,17 @@ class UserValidator {
 
     if (!await this.userService.isUniqueAttribute("email", user.email)) {
       return res.status(500).json({ error: 'Email is taken' });
+    }
+
+    next();
+  }
+
+  validateLogin = async (req, res, next) => {
+    const user = req.body;
+    const { error } = this.login.validate(user);
+
+    if (error) {
+      return res.status(500).json({ error: error.details });
     }
 
     next();

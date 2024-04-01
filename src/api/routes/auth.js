@@ -9,7 +9,7 @@ const userValidator = new UserValidator()
 
 
 router.post("/register", userValidator.validateCreate, authController.register);
-router.post("/login", authController.login);
+router.post("/login", userValidator.validateLogin, authController.login);
 
 
 

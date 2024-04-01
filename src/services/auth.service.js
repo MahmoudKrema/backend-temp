@@ -23,7 +23,7 @@ class AuthService {
 
     async login(username, password) {
 
-        const user = await UserRepo.getUserByAttributee("username", username);
+        const user = await UserRepo.getUserByAttribute("username", username);
 
         if (!user) {
             
