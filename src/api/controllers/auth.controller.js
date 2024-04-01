@@ -23,9 +23,9 @@ class UserController {
 
         const { username, password } = req.body;
 
-        const user = await this.authService.login(username, password);
+        const token = await this.authService.login(username, password);
 
-        return new SuccessResponse("User is logged in successfully").send(res);
+        return new SuccessResponse("User is logged in successfully", { token }).send(res);
     }
 }
 

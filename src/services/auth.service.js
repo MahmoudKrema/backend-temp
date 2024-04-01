@@ -1,6 +1,7 @@
 import UserRepo from "../repos/user.repo.js";
 import { BadRequestError, NotFoundError } from "../utils/appError.js";
 import bcrypt from "bcrypt";
+import JWTHelper from "../utils/jwt.js";
 
 class AuthService {
 
@@ -34,9 +35,11 @@ class AuthService {
 
         if (!passwordMatch) {
             throw new BadRequestError("Wrong username or password");
-        }        
+        }
 
-        return passwordMatch;
+        const token = JWTHelper.generateToken(user);
+
+        return token;
     }
 
 }

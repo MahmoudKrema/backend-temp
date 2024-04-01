@@ -9,7 +9,7 @@ class UserController {
     getUsers = async (req, res) => {
 
             const users = await this.userService.getUsers();
-            return new SuccessResponse("Users are fetched successfully", users).send(res);
+            return new SuccessResponse("Users are fetched successfully", { users }).send(res);
     }
 
     getUser = async (req, res) => {
@@ -17,7 +17,7 @@ class UserController {
         const id = req.params.id;
  
         const user = await this.userService.getUserById(id);
-        return new SuccessResponse("User is fetched successfully", user).send(res);
+        return new SuccessResponse("User is fetched successfully", { user }).send(res);
     }
 
     createUser = async (req, res) => {

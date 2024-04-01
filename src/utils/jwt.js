@@ -1,37 +1,27 @@
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import passport from 'passport';
+import jwt from "jsonwebtoken";
+import config from "../config/index.js";
 
-const opts = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: "mysecretkey",
-//   algorithms: ['BASE64'],
-
-//   issuer: 'accounts.examplesoft.com',
-//   audience: 'yoursite.net'
-};
-
-
-passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
-
-    console.log(jwt_payload);
-    try {
-        
-    // const user = await User.findOne({ id: jwt_payload.sub });
-    const user = {
-        name: "krema",
+export default class JWTHelper {
+  static generateToken(user) {
+    const payload = {
+      id: user.id,
     };
+    const options = {
+      expiresIn: "1h",
+    };
+    return jwt.sign(payload, config.jwtSecret, options);
+  }
 
-    if (user) {
-        
-        return done(null, user);
-    } else {
-        return done(null, false);
-        // or you could create a new account
-    }
-    } catch (err) {
-    return done(err, false);
-    }
-}));
+  static verifyToken(token) {
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, config.jwtSecret, (err, decoded) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(decoded);
+        }
+      });
+    });
+  }
+}
 
-
-export default passport;
