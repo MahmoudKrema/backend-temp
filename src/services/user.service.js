@@ -1,5 +1,6 @@
 import UserRepo from "../repos/user.repo.js";
 import { NotFoundError } from "../utils/appError.js";
+import bcrypt from "bcrypt";
 
 class UserService {
     async getUsers() {
@@ -19,8 +20,13 @@ class UserService {
         return user;
     }
 
-    async createUser(user) {
-        const userDb = await UserRepo.createUser(user);
+    async createUser(username, email, password) {
+
+        // hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        const userDb = await UserRepo.createUser(username, email, hashedPassword);
+
         return userDb;
     }
 

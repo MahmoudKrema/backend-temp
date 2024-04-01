@@ -47,9 +47,19 @@ class UserRepo {
    * @param {Object} user - The user object containing the user's information.
    * @return {Promise<Object>} The newly created user object.
    */
-  static async createUser(user) {
+  static async createUser(username, email, password) {
+
+    console.log({
+      username,
+      email,
+      password,
+    },);
     const newUser = await prisma.user.create({
-      data: user,
+      data: {
+        username,
+        email,
+        password,
+      },
     });
     return newUser;
   }

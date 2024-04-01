@@ -27,7 +27,7 @@ class ErrorResponse extends AppResponse {
         res.status(this.statusCode).json({ message: this.message });
     }
 }
- 
+
 class SuccessResponse extends AppResponse {
     
     constructor(message, data) {
