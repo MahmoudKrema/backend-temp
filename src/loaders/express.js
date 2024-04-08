@@ -1,9 +1,10 @@
+import "express-async-errors";
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import "express-async-errors";
 import routes from '../api/routes/index.js';
 import ErrorHandler from '../utils/errorHandler.js';
+import authenticate from '../api/middlewares/authenticate.js';
 
 
 
@@ -24,7 +25,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json());
 app.use(cors());
 
+app.use(async (req, res, next) => {
 
+    if (req.path.startsWith("/auth")) {
+        
+        next(); 
+    } else {
+        await authenticate(req, res, next);
+    }
+});
 
 
 app.use(routes);

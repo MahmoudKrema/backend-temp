@@ -25,11 +25,44 @@ class UserValidator {
         email: Joi.string()
         .email()
         .required(),
+
+        // role: Joi.string()
+        // .valid('admin', 'user')
+        // .required(),
   
         password: Joi.string()
         .min(3)
         .max(255)
+        .required(),
+
+        role: Joi.string()
+        .valid('admin', 'user')
         .required()
+    });
+
+    this.registerSchema = Joi.object({
+      username: Joi.string()
+        .empty()
+        .min(3)
+        .max(255)
+        .required()
+        .messages({
+          'string.base': 'Username must be a string',
+          'string.empty': 'Username cannot be empty',
+          'string.min': 'Username must have at least {#limit} characters',
+          'string.max': 'Username must have at most {#limit} characters',
+          'any.required': 'Username is required'
+        }),
+  
+        email: Joi.string()
+        .email()
+        .required(),
+  
+        password: Joi.string()
+        .min(3)
+        .max(255)
+        .required(),
+
     });
   
   
@@ -70,6 +103,26 @@ class UserValidator {
   validateCreate = async (req, res, next) => {
     const user = req.body;
     const { error } = this.createSchema.validate(user);
+
+    if (error) {
+      return res.status(500).json({ error: error.details });
+    }
+
+    // Use model istead of service
+    if (!await this.userService.isUniqueAttribute("username", user.username)) {
+      return res.status(500).json({ error: 'Username is taken' });
+    }
+
+    if (!await this.userService.isUniqueAttribute("email", user.email)) {
+      return res.status(500).json({ error: 'Email is taken' });
+    }
+
+    next();
+  }
+
+  validateRegister = async (req, res, next) => {
+    const user = req.body;
+    const { error } = this.registerSchema.validate(user);
 
     if (error) {
       return res.status(500).json({ error: error.details });

@@ -23,8 +23,10 @@ model User {
   username  String    @unique
   email     String    @unique
   password  String
+  role      String
   createdAt DateTime  @default(now())
-  orders    Order[]
+  buyingOrders    Order[] @relation("customer")
+  sellingOrders    Order[] @relation("seller")
   products  Product[]
 }
 
@@ -39,8 +41,7 @@ model Product {
   // Define a relation to the User who created this product
   seller      User     @relation(fields: [sellerId], references: [id])
   sellerId    Int
-  Order       Order?   @relation(fields: [orderId], references: [id])
-  orderId     Int?
+  orderProduct OrderProduct[]
 }
 
 // Order table to store information about orders
@@ -49,10 +50,23 @@ model Order {
   totalAmount Float
   createdAt   DateTime  @default(now())
   // Define a relation to the User who made this order
-  customer    User      @relation(fields: [customerId], references: [id])
+  customer    User      @relation(fields: [customerId], references: [id], name: "customer")
   customerId  Int
-  // Define a relation to the Products in this order
-  products    Product[]
+
+  seller      User      @relation(fields: [sellerId], references: [id], name: "seller")
+  sellerId    Int
+
+  orderProduct OrderProduct[]
+}
+
+model OrderProduct {
+  id          Int     @id @default(autoincrement())
+
+  order       Order   @relation(fields: [orderId], references: [id])
+  orderId     Int
+
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   Int
 }
 
 // Define indexes or constraints if needed

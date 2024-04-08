@@ -6,14 +6,14 @@ import JWTHelper from "../utils/jwt.js";
 class AuthService {
 
 
-    async register(username, email, password) {
+    async register(username, email, password, role) {
 
         // hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
         let userDb;
 
         try {
-            userDb = await UserRepo.createUser(username, email, hashedPassword);
+            userDb = await UserRepo.createUser(username, email, hashedPassword, role);
         } catch (error) {
             
             console.log(error);

@@ -12,10 +12,10 @@ export default class ErrorHandler {
      */
     static handle(error, res) {
 
+
         // TODO: handle uncaught errors and error when no res object and think about the cases with no res object
         if (!res) {
             
-            console.log("NO RESPONSE OBJECT");
         }
         
         if (error instanceof AppError) {

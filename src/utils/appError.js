@@ -41,6 +41,17 @@ class NotFoundError extends AppError {
     }
 }
 
+class ForbiddenError extends AppError {
+    /**
+     *
+     * @param {string} message - the error message
+     * @return {void} 
+     */
+    constructor(message = 'Forbidden') {
+        super(message, ERROR_TYPES.FORBIDDEN, STATUS_CODES.FORBIDDEN);
+    }
+}
+
 class InternalServerError extends AppError {
     /**
      *
@@ -57,5 +68,6 @@ export {
     AppError,
     BadRequestError,
     NotFoundError,
-    InternalServerError
+    InternalServerError,
+    ForbiddenError
 }

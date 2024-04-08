@@ -20,11 +20,21 @@ class UserController {
         return new SuccessResponse("User is fetched successfully", { user }).send(res);
     }
 
+    getSelf = async (req, res) => {
+
+        const id = req.currentUser.id;
+ 
+        const user = await this.userService.getUserById(id);
+        return new SuccessResponse("User is fetched successfully", { user }).send(res);
+    }
+
+
     createUser = async (req, res) => {
 
-        const user = req.body;
+        const { username, email, password, role } = req.body;
 
-        const userDb = await this.userService.createUser(user);
+
+        const userDb = await this.userService.createUser(username, email, password, role);
 
         return new CreatedResponse("User is created successfully", userDb).send(res);
 

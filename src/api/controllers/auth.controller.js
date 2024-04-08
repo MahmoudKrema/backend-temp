@@ -14,7 +14,9 @@ class UserController {
 
         const { username, email, password } = req.body;
 
-        const user = await this.authService.register(username, email, password);
+        const role = "user";
+
+        const user = await this.authService.register(username, email, password, role);
 
         return new CreatedResponse("User is created successfully", user).send(res);
     }

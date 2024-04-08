@@ -20,12 +20,13 @@ class UserService {
         return user;
     }
 
-    async createUser(username, email, password) {
+    async createUser(username, email, password, role) {
+
 
         // hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
         
-        const userDb = await UserRepo.createUser(username, email, hashedPassword);
+        const userDb = await UserRepo.createUser(username, email, hashedPassword, role);
 
         return userDb;
     }

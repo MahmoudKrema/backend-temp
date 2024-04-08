@@ -9,12 +9,16 @@
   },
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/index.js",
+    "prisma:migrate": "npx prisma migrate dev --name init",
+    "prisma:migrate-deploy": "npx prisma migrate deploy",
+    "prisma:migrate-reset": "npx prisma migrate reset --skip-seed"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.11.0",
+    "accesscontrol": "^2.2.1",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
