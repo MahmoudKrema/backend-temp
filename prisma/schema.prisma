@@ -68,7 +68,3 @@ model OrderProduct {
   product     Product   @relation(fields: [productId], references: [id])
   productId   Int
 }
-
-// Define indexes or constraints if needed
-// Example:
-// @@unique([username, email])

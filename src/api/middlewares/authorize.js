@@ -8,7 +8,8 @@ const ac = new AccessControl();
 // Define roles and permissions
 ac.grant('user')
     .readOwn('user')
-    .updateOwn('user');
+    .updateOwn('user')
+    .createOwn('product');
 
 ac.grant('admin')
     .extend('user')
