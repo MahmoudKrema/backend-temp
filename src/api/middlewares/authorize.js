@@ -9,14 +9,15 @@ const ac = new AccessControl();
 ac.grant('user')
     .readOwn('user')
     .updateOwn('user')
-    .createOwn('product');
+    .createOwn('product')
+    .readAny('product')
 
 ac.grant('admin')
     .extend('user')
     .readAny('user')
     .createAny('user')
     .updateAny('user')
-    .deleteAny('user');
+    .deleteAny('user')
 
 
 function checkPermission(action, resource) {

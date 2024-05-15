@@ -12,7 +12,11 @@
     "start": "nodemon src/index.js",
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:migrate-deploy": "npx prisma migrate deploy",
-    "prisma:migrate-reset": "npx prisma migrate reset --skip-seed"
+    "prisma:migrate-reset": "npx prisma migrate reset --skip-seed",
+    "prisma:seed": "npx prisma db seed"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   },
   "author": "",
   "license": "ISC",

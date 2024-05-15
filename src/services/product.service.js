@@ -2,10 +2,11 @@ import ProductRepo from "../repos/product.repo.js";
 import { NotFoundError } from "../utils/appError.js";
 
 class ProductService {
-    // async getProducts() {
-    //     const products = await ProductRepo.getAllProducts();
-    //     return products;
-    // }
+    
+    async getProducts() {
+        const products = await ProductRepo.getAllProducts();
+        return products;
+    }
 
     // async getProductById(id) {
 

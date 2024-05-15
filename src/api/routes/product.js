@@ -11,6 +11,10 @@ const productValidator = new ProductValidator()
 const resource = 'product'
 
  
+router.get("/", checkPermission('readAll', resource), productController.getProducts);
+
+router.get("/:productId", checkPermission('readAny', resource), productController.getProducts);
+
 router.post("/", checkPermission('createOwn', resource), productValidator.validateCreate, productController.createProduct);
 
 

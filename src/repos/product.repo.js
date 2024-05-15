@@ -16,15 +16,15 @@ class ProductRepo {
   //    return product;
   // }
 
-  // /**
-  //  * Retrieves all products from the database.
-  //  *
-  //  * @return {Array} An array of product objects
-  //  */
-  // static async getAllProducts() {
-  //   const products = await prisma.product.findMany();
-  //   return products;
-  // }
+  /**
+   * Retrieves all products from the database.
+   *
+   * @return {Array} An array of product objects
+   */
+  static async getAllProducts() {
+    const products = await prisma.product.findMany();
+    return products;
+  }
 
   // /**
   //  * Retrieves a product from the database based on their productname.

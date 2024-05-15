@@ -6,11 +6,11 @@ class ProductController {
     constructor() {
         this.productService = new ProductService();
      }
-    // getProducts = async (req, res) => {
+    getProducts = async (req, res) => {
 
-    //         const products = await this.productService.getProducts();
-    //         return new SuccessResponse("Products are fetched successfully", { products }).send(res);
-    // }
+            const products = await this.productService.getProducts();
+            return new SuccessResponse("Products are fetched successfully", { products }).send(res);
+    }
 
     // getProduct = async (req, res) => {
 
@@ -37,17 +37,11 @@ class ProductController {
 
         const sellerId = currentUser.id;
 
-
         console.log(name, description, price, stock, sellerId);
-
 
         const productDb = await this.productService.createProduct(name, description, price, stock, sellerId);
 
-        // return new CreatedResponse("Product is created successfully", productDb).send(res);
-
         return new CreatedResponse("Product is created successfully", productDb).send(res);
-
-
 
     }
 
