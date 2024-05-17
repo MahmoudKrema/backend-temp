@@ -11,11 +11,11 @@ const productValidator = new ProductValidator()
 const resource = 'product'
 
  
-router.get("/", checkPermission('readAll', resource), productController.getProducts);
-
-router.get("/:productId", checkPermission('readAny', resource), productController.getProducts);
-
+router.get("/", checkPermission('readAny', resource), productController.getProducts);
+router.get("/:id", checkPermission('readAny', resource), productValidator.validateGet, productController.getProduct);
 router.post("/", checkPermission('createOwn', resource), productValidator.validateCreate, productController.createProduct);
+router.patch("/:id", checkPermission('updateOwn', resource), productValidator.validateUpdate, productController.updateProduct);
+router.delete("/:id", checkPermission('deleteOwn', resource), productValidator.validateDelete, productController.deleteProduct);
 
 
 

@@ -1,20 +1,20 @@
 import prisma from "../loaders/prisma.js";
 class ProductRepo {
-  // /**
-  //  * Retrieves a product from the database based on their ID.
-  //  *
-  //  * @param {number} id - The ID of the product to retrieve.
-  //  * @return {Promise<object>} A promise that resolves to the product object.
-  //  */
-  // static async getProductById(id) {
-  //   const product = await prisma.product.findUnique({
-  //     where: {
-  //       id: id,
-  //     },
-  //   });
+  /**
+   * Retrieves a product from the database based on their ID.
+   *
+   * @param {number} id - The ID of the product to retrieve.
+   * @return {Promise<object>} A promise that resolves to the product object.
+   */
+  static async getProductById(id) {
+    const product = await prisma.product.findUnique({
+      where: {
+        id: id,
+      },
+    });
 
-  //    return product;
-  // }
+     return product;
+  }
 
   /**
    * Retrieves all products from the database.
@@ -26,20 +26,35 @@ class ProductRepo {
     return products;
   }
 
-  // /**
-  //  * Retrieves a product from the database based on their productname.
-  //  *
-  //  * @param {string} productname - The productname of the product to retrieve.
-  //  * @return {Promise<Object>} A Promise that resolves to the product object if found, or null if not found.
-  //  */
-  // static async getProductByAttribute(attribute, value) {
-  //   const product = await prisma.product.findUnique({
-  //     where: {
-  //       [attribute]: value,
-  //     },
-  //   });
-  //   return product;
-  // }
+  /**
+   * Retrieves a product from the database based on their productname.
+   *
+   * @param {string} productname - The productname of the product to retrieve.
+   * @return {Promise<Object>} A Promise that resolves to the product object if found, or null if not found.
+   */
+  static async getProductByAttribute(attribute, value) {
+    const product = await prisma.product.findUnique({
+      where: {
+        [attribute]: value,
+      },
+    });
+    return product;
+  }
+
+  /**
+   * Retrieves a product from the database based on their productname.
+   *
+   * @param {Number} userId - The productname of the product to retrieve.
+   * @return {Promise<Object>} A Promise that resolves to the product object if found, or null if not found.
+   */
+  static async getUserProducts(sellerId) {
+    const products = await prisma.product.findMany({
+      where: {
+        sellerId,
+      },
+    });
+    return products;
+  }
 
   /**
    * Creates a new product in the database.
@@ -61,34 +76,34 @@ class ProductRepo {
     return newProduct;
   }
 
-  // /**
-  //  * Update a product by their ID.
-  //  *
-  //  * @param {number} id - the ID of the product to update
-  //  * @param {object} product - the updated product data
-  //  * @returns {Promise<object>} the updated product
-  //  */
-  // static async updateProduct(id, product) {
+  /**
+   * Update a product by their ID.
+   *
+   * @param {number} id - the ID of the product to update
+   * @param {object} product - the updated product data
+   * @returns {Promise<object>} the updated product
+   */
+  static async updateProduct(id, product) {
 
-  //   const updatedProduct = await prisma.product.update({
-  //     where: { id },
-  //     data: product,
-  //   });
-  //   return updatedProduct;
-  // }
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: product,
+    });
+    return updatedProduct;
+  }
 
-  // /**
-  //  * Deletes a product by ID.
-  //  *
-  //  * @param {number} id - The ID of the product to delete
-  //  * @return {Promise<Object>} The deleted product object
-  //  */
-  // static async deleteProduct(id) {
-  //   const deletedProduct = await prisma.product.delete({
-  //     where: { id },
-  //   });
-  //   return deletedProduct;
-  // }
+  /**
+   * Deletes a product by ID.
+   *
+   * @param {number} id - The ID of the product to delete
+   * @return {Promise<Object>} The deleted product object
+   */
+  static async deleteProduct(id) {
+    const deletedProduct = await prisma.product.delete({
+      where: { id },
+    });
+    return deletedProduct;
+  }
 
 
   // /**

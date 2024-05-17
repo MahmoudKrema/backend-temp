@@ -1,12 +1,12 @@
 import Joi from "joi";
-// import ProductService from "../../services/product.service.js";
+import ProductService from "../../services/product.service.js";
 
 
 
 class ProductValidator {
   constructor() {
 
-    // this.productService = new ProductService();
+    this.productService = new ProductService();
 
     this.createSchema = Joi.object({
         name: Joi.string()
@@ -34,16 +34,14 @@ class ProductValidator {
 
       id: Joi.number().integer().required(),
 
-      productname: Joi.string()
-        .empty()
-        .min(3)
-        .max(255),
-      
-      email: Joi.string()
-      .email()
-          
-      
-    })
+      name: Joi.string(),
+
+      description: Joi.string(),
+
+      price: Joi.number(),
+
+      stock: Joi.number()
+  });
   }
 
   validateCreate = async (req, res, next) => {
@@ -64,33 +62,16 @@ class ProductValidator {
     next();
   }
 
-  validateRegister = async (req, res, next) => {
-    const product = req.body;
-    const { error } = this.registerSchema.validate(product);
+  validateGet = (req, res, next) => {
+
+
+    const { error, value: { id } } = this.getSchema.validate(req.params);
 
     if (error) {
-      return res.status(500).json({ error: error.details });
+        return res.status(500).json({ error: error.details });
     }
 
-    // Use model istead of service
-    if (!await this.productService.isUniqueAttribute("productname", product.productname)) {
-      return res.status(500).json({ error: 'Productname is taken' });
-    }
-
-    if (!await this.productService.isUniqueAttribute("email", product.email)) {
-      return res.status(500).json({ error: 'Email is taken' });
-    }
-
-    next();
-  }
-
-  validateLogin = async (req, res, next) => {
-    const product = req.body;
-    const { error } = this.login.validate(product);
-
-    if (error) {
-      return res.status(500).json({ error: error.details });
-    }
+    req.params.id = id;
 
     next();
   }
@@ -104,35 +85,18 @@ class ProductValidator {
     };
 
     const { error, value: { id } } = this.updateSchema.validate(request);
+    
 
     if (error) {
       return res.status(500).json({ error: error.details });
     }
-    
+
+    // Get the product from the database
     const product = await this.productService.getProductById(id);
 
-    if (!product) {
-      return res.status(500).json({ error: "Product not found" });
-    }
+    if (product.sellerId !== req.currentUser.id) {
 
-    const productWithSameProductname = await this.productService.getProductByAttribute("productname", req.body.productname);
-
-    if (productWithSameProductname && productWithSameProductname.id !== id) {
-      return res.status(500).json({ error: "Productname is taken" });
-    }
-
-    req.params.id = id;
-
-    next();
-  }
-
-  validateGet = (req, res, next) => {
-
-
-    const { error, value: { id } } = this.getSchema.validate(req.params);
-
-    if (error) {
-        return res.status(500).json({ error: error.details });
+      return res.status(500).json({ error: "User is not authorized to update this product" });
     }
 
     req.params.id = id;
@@ -152,6 +116,10 @@ class ProductValidator {
 
     if (!product) {
       return res.status(500).json({ error: "Product not found" });
+    }
+
+    if (product.sellerId !== req.currentUser.id) {
+      return res.status(500).json({ error: "User is not authorized to delete this product" });
     }
 
     req.params.id = id;

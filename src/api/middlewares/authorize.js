@@ -11,6 +11,8 @@ ac.grant('user')
     .updateOwn('user')
     .createOwn('product')
     .readAny('product')
+    .updateOwn('product')
+    .deleteOwn('product')
 
 ac.grant('admin')
     .extend('user')
